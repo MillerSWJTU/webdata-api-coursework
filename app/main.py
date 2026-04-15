@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
@@ -7,10 +8,16 @@ from app.api.router import api_router
 from app.core.config import settings
 from app.db.init_db import init_db
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
+
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     description="Books and reviews API built for XJCO3011 coursework",
+    lifespan=lifespan,
 )
 
 @app.exception_handler(StarletteHTTPException)
@@ -34,11 +41,6 @@ async def global_exception_handler(request: Request, exc: Exception):
         content={"success": False, "error": "Internal Server Error", "details": str(exc)},
     )
 
-
-
-@app.on_event("startup")
-def on_startup() -> None:
-    init_db()
 
 
 app.include_router(api_router, prefix="/api")
