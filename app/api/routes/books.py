@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
+from app.api.deps import verify_api_key
 from app.crud import book as book_crud
 from app.db.database import get_db
 from app.schemas.book import BookCreate, BookRead, BookUpdate
@@ -31,12 +32,12 @@ def get_book(book_id: int, db: Session = Depends(get_db)):
     return book
 
 
-@router.post("", response_model=BookRead, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=BookRead, status_code=status.HTTP_201_CREATED, dependencies=[Depends(verify_api_key)])
 def create_book(payload: BookCreate, db: Session = Depends(get_db)):
     return book_crud.create_book(db, payload)
 
 
-@router.put("/{book_id}", response_model=BookRead)
+@router.put("/{book_id}", response_model=BookRead, dependencies=[Depends(verify_api_key)])
 def update_book(book_id: int, payload: BookUpdate, db: Session = Depends(get_db)):
     book = book_crud.get_book(db, book_id)
     if not book:
@@ -44,7 +45,7 @@ def update_book(book_id: int, payload: BookUpdate, db: Session = Depends(get_db)
     return book_crud.update_book(db, book, payload)
 
 
-@router.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(verify_api_key)])
 def delete_book(book_id: int, db: Session = Depends(get_db)):
     book = book_crud.get_book(db, book_id)
     if not book:
