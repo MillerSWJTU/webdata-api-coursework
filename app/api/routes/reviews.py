@@ -13,9 +13,9 @@ router = APIRouter()
 @router.get("/{book_id}/reviews", response_model=list[ReviewRead])
 def list_book_reviews(
     book_id: int,
-    skip: int = Query(default=0, ge=0, description="跳过指定数量的结果 (分页)"),
-    limit: int = Query(default=20, ge=1, le=100, description="最大返回数量 (分页)"),
-    min_score: float | None = Query(default=None, ge=0, le=5, description="最低评分过滤 (如只看4分以上好评)"),
+    skip: int = Query(default=0, ge=0, description="Skip specified number of results (pagination)"),
+    limit: int = Query(default=20, ge=1, le=100, description="Maximum number of items to return (pagination)"),
+    min_score: float | None = Query(default=None, ge=0, le=5, description="Filter by minimum score (e.g., >= 4.0)"),
     db: Session = Depends(get_db),
 ):
     book = book_crud.get_book(db, book_id)

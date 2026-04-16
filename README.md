@@ -2,6 +2,9 @@
 
 Data-driven RESTful API built with FastAPI, SQLite and Swagger for XJCO3011 coursework.
 
+🚀 **Live Deployment**: [https://webdata-api-coursework.onrender.com](https://webdata-api-coursework.onrender.com)
+📄 **Static API Documentation (PDF)**: [docs/API.pdf](./docs/API.pdf)
+
 ## Tech Stack
 
 - FastAPI
@@ -42,6 +45,11 @@ uvicorn app.main:app --reload
 
 ## API Docs
 
+**Live Online Documentation:**
+- Swagger UI (Interactive): [https://webdata-api-coursework.onrender.com/docs](https://webdata-api-coursework.onrender.com/docs)
+- ReDoc (Detailed): [https://webdata-api-coursework.onrender.com/redoc](https://webdata-api-coursework.onrender.com/redoc)
+
+**Local Development Documentation (When running `uvicorn`):**
 - Swagger UI: http://127.0.0.1:8000/docs
 - ReDoc: http://127.0.0.1:8000/redoc
 

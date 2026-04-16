@@ -11,10 +11,10 @@ router = APIRouter()
 
 @router.get("", response_model=list[BookRead])
 def list_books(
-    skip: int = Query(default=0, ge=0, description="分页偏移"),
-    limit: int = Query(default=20, ge=1, le=100, description="返回数量上限"),
-    query: str | None = Query(default=None, description="按书名关键词搜索"),
-    category: str | None = Query(default=None, description="按类别过滤"),
+    skip: int = Query(default=0, ge=0, description="Pagination offset"),
+    limit: int = Query(default=20, ge=1, le=100, description="Maximum number of items to return"),
+    query: str | None = Query(default=None, description="Search by book title keywords"),
+    category: str | None = Query(default=None, description="Filter by book category"),
     db: Session = Depends(get_db),
 ):
     return book_crud.list_books(db, skip=skip, limit=limit, query=query, category=category)
