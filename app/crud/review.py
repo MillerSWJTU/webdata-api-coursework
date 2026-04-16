@@ -5,14 +5,15 @@ from app.models.review import Review
 from app.schemas.review import ReviewCreate
 
 
-def list_reviews_for_book(db: Session, book_id: int, *, skip: int = 0, limit: int = 20):
+def list_reviews_for_book(db: Session, book_id: int, *, skip: int = 0, limit: int = 20, min_score: float | None = None):
     stmt = (
         select(Review)
         .where(Review.book_id == book_id)
-        .order_by(desc(Review.id))
-        .offset(skip)
-        .limit(limit)
     )
+    if min_score is not None:
+        stmt = stmt.where(Review.score >= min_score)
+    
+    stmt = stmt.order_by(desc(Review.id)).offset(skip).limit(limit)
     return db.execute(stmt).scalars().all()
 
 

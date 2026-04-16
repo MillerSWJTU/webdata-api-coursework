@@ -5,8 +5,10 @@ from app.models.book import Book
 from app.schemas.book import BookCreate, BookUpdate
 
 
-def list_books(db: Session, *, skip: int = 0, limit: int = 20, category: str | None = None):
+def list_books(db: Session, *, skip: int = 0, limit: int = 20, query: str | None = None, category: str | None = None):
     stmt = select(Book)
+    if query:
+        stmt = stmt.where(Book.title.ilike(f"%{query}%"))
     if category:
         stmt = stmt.where(Book.categories.ilike(f"%{category}%"))
     stmt = stmt.order_by(Book.id).offset(skip).limit(limit)
