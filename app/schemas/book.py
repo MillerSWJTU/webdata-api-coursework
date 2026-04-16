@@ -2,13 +2,13 @@ from pydantic import BaseModel, Field, ConfigDict
 
 
 class BookBase(BaseModel):
-    title: str = Field(min_length=1, max_length=255, description="书籍标题，最多255个字符")
-    description: str | None = Field(default=None, description="书籍详细描述简介")
-    authors: str | None = Field(default=None, description="作者，多人可用逗号分隔")
-    publisher: str | None = Field(default=None, description="出版社名称")
-    published_date: str | None = Field(default=None, description="出版日期 (如 1999-12-01)")
-    categories: str | None = Field(default=None, description="图书类别 (如 Fiction, Computers)")
-    ratings_count: int = Field(default=0, ge=0, description="评分总人数")
+    title: str = Field(min_length=1, max_length=255, description="Book title, max 255 characters")
+    description: str | None = Field(default=None, description="Detailed description or synopsis of the book")
+    authors: str | None = Field(default=None, description="Authors, comma-separated for multiple")
+    publisher: str | None = Field(default=None, description="Publisher name")
+    published_date: str | None = Field(default=None, description="Published date (e.g., 1999-12-01)")
+    categories: str | None = Field(default=None, description="Book categories (e.g., Fiction, Computers)")
+    ratings_count: int = Field(default=0, ge=0, description="Total number of ratings")
 
 
 class BookCreate(BookBase):
