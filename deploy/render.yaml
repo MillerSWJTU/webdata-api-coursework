@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: cw1-books-api
+    env: python
+    plan: free
+    # 【专业级 CI/CD 构建命令】: 自动装依赖，并在云端启动前立刻读取 CSV 跑入真实数据，形成所谓的 "Immutable Infrastructure" 
+    buildCommand: "pip install -r requirements.txt && PYTHONPATH=. python scripts/seed_sqlite.py"
+    # 【专业级生产启动命令】: Uvicorn 将绑定到 Render 自动分配的 $PORT，抛弃本地的 localhost 的玩具式启动
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      # 锁定与我们在本地一致的现代化 Python 版本，杜绝环境不一致带来的玄学 Bug
+      - key: PYTHON_VERSION
+        value: 3.12.9
+      # 为安全防线注入真实密钥
+      - key: API_KEY
+        value: cw1-production-key-2026

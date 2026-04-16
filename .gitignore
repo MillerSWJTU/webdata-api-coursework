@@ -210,3 +210,6 @@ archive/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# AI config folders
+.claude/
