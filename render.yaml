@@ -13,4 +13,4 @@ services:
         value: 3.12.9
       # 为安全防线注入真实密钥
       - key: API_KEY
-        value: cw1-production-key-2026
+        value: xjco3011-secret-key

@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     init_db()
     key_preview = settings.api_key[:6] + "..." if len(settings.api_key) > 6 else "***"
-    logger.warning("STARTUP: effective API_KEY prefix = %s", key_preview)
+    logger.warning("STARTUP: effective API_KEY prefix = %s, length = %d", key_preview, len(settings.api_key))
     yield
 
 app = FastAPI(
