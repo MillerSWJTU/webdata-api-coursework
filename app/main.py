@@ -1,3 +1,4 @@
+import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
@@ -8,9 +9,13 @@ from app.api.router import api_router
 from app.core.config import settings
 from app.db.init_db import init_db
 
+logger = logging.getLogger(__name__)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    key_preview = settings.api_key[:6] + "..." if len(settings.api_key) > 6 else "***"
+    logger.warning("STARTUP: effective API_KEY prefix = %s", key_preview)
     yield
 
 app = FastAPI(
