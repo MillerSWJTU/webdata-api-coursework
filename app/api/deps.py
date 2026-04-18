@@ -10,9 +10,7 @@ def verify_api_key(api_key: str = Security(API_KEY_HEADER)) -> str:
     Minimal API Key interceptor to protect write operations (POST/PUT/DELETE).
     Returns 403 Forbidden if the request does not provide a valid X-API-Key.
     """
-    # Use a hardcoded key or fetch from configuration
-    # Provide a default fallback key to prevent evaluation failures if env vars are missing
-    expected_api_key = getattr(settings, "API_KEY", "xjco3011-secret-key")
+    expected_api_key = settings.api_key
     
     if api_key != expected_api_key:
         raise HTTPException(
