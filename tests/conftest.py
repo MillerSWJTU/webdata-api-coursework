@@ -48,5 +48,5 @@ def client(db_session):
 @pytest.fixture(scope="session")
 def auth_headers():
     # Extract the default safety key to serve as authorization headers for tests
-    api_key = getattr(settings, "API_KEY", "xjco3011-secret-key")
+    api_key = settings.api_key
     return {"X-API-Key": api_key}

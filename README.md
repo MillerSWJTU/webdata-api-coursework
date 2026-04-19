@@ -2,7 +2,7 @@
 
 Data-driven RESTful API built with FastAPI, SQLite and Swagger for XJCO3011 coursework.
 
-🚀 **Live Deployment**: [https://webdata-api-coursework.onrender.com](https://webdata-api-coursework.onrender.com)
+🚀 **Live Deployment**: [https://cw1-books-api.onrender.com](https://cw1-books-api.onrender.com)
 📄 **Static API Documentation (PDF)**: [docs/API.pdf](./docs/API.pdf)
 
 ## Tech Stack
@@ -53,22 +53,31 @@ App startup creates database tables automatically, but it does not import CSV da
 
 ## Environment Variables
 
-- `DATABASE_URL`: database connection string. Default: `sqlite:///./app.db`
-- `API_KEY`: API key for write operations. Local default: `xjco3011-secret-key`; production should override via environment variables (do not commit production secrets).
+| Variable | Purpose | Local default |
+|----------|---------|----------------|
+| `DATABASE_URL` | SQLAlchemy database URL | `sqlite:///./app.db` |
+| `API_KEY` | Required for write endpoints (header `X-API-Key`) | `xjco3011-secret-key` (see `app/core/config.py`) |
 
-Example:
+**Local example (PowerShell):**
 
-```bash
-# PowerShell
-$env:DATABASE_URL="sqlite:///./app.db"
-$env:API_KEY="your-secret-key"
+```powershell
+$env:DATABASE_URL = "sqlite:///./app.db"
+$env:API_KEY = "your-secret-key"
 ```
+
+**Production (Render)**  
+Service name in [`render.yaml`](./render.yaml): `cw1-books-api`. Set secrets in the Render dashboard: **Dashboard → your web service → Environment**:
+
+- **`API_KEY`**: use a strong random value. The app reads this at runtime; do not commit real production keys to git. If you use the same value as local development for coursework, set it explicitly here so it matches what you use in clients/tests.
+- **`DATABASE_URL`**: optional; if unset, the default SQLite path applies (ephemeral disk on Render resets on redeploy unless you use a persistent disk or external DB).
+
+You can also define these in `render.yaml` under `envVars` for non-secret defaults, but prefer the dashboard or Render **Secret** files for real API keys.
 
 ## API Docs
 
 **Live Online Documentation:**
-- Swagger UI (Interactive): [https://webdata-api-coursework.onrender.com/docs](https://webdata-api-coursework.onrender.com/docs)
-- ReDoc (Detailed): [https://webdata-api-coursework.onrender.com/redoc](https://webdata-api-coursework.onrender.com/redoc)
+- Swagger UI (Interactive): [https://cw1-books-api.onrender.com/docs](https://cw1-books-api.onrender.com/docs)
+- ReDoc (Detailed): [https://cw1-books-api.onrender.com/redoc](https://cw1-books-api.onrender.com/redoc)
 
 **Local Development Documentation (When running `uvicorn`):**
 - Swagger UI: http://127.0.0.1:8000/docs
@@ -76,7 +85,7 @@ $env:API_KEY="your-secret-key"
 
 ## Authentication
 
-The following write endpoints require header `X-API-Key: <your_api_key>`:
+The following write endpoints require header `X-API-Key: <your_api_key>`. The value must match `API_KEY` for that environment (local env or Render **Environment**; see above).
 
 - `POST /api/books`
 - `PUT /api/books/{book_id}`
@@ -97,16 +106,17 @@ The following write endpoints require header `X-API-Key: <your_api_key>`:
 
 ## Testing
 
-Run tests with:
+Automated tests use **in-memory SQLite** (see `tests/conftest.py`). `tests/test_books.py` covers books list/pagination/filters, stats, CRUD, `X-API-Key` (403), validation (422), and 404. `tests/test_reviews.py` covers listing/creating reviews (including `min_score` and pagination). `tests/test_health.py` covers `GET /api/health`.
 
 ```bash
 pytest -q
+pytest -v
 ```
 
-Or use verbose output:
+To fail the run if any warning appears (stricter CI-style check):
 
 ```bash
-pytest -v
+pytest -q -W error
 ```
 
 ## Data Notes
