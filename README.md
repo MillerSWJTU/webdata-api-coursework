@@ -121,5 +121,6 @@ pytest -q -W error
 
 ## Data Notes
 
+- **Provenance:** upstream data is based on the Kaggle dataset *Amazon Books Reviews* (Goodreads-style book descriptions and reviews): [https://www.kaggle.com/datasets/mohamedbakhet/amazon-books-reviews](https://www.kaggle.com/datasets/mohamedbakhet/amazon-books-reviews). Use is subject to that page’s licence and Kaggle’s terms (academic/coursework use only here).
 - Raw source files are stored under `archive/` (ignored by git due to size).
 - Processed files used by the app are stored under `data/`.
